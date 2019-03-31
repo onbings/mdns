@@ -1,3 +1,4 @@
+/*
 import { Greeter } from './greeter';
 export * from './greeter';
 // import { App } from './app';
@@ -16,3 +17,4 @@ export * from './greeter';
 	// var greet = new Greeter('myName');
 	// greet.greet();
 })(window);
+*/

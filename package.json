@@ -1,37 +1,42 @@
 {
   "name": "mdns",
   "version": "1.2.3",
-  "main": "lib/index.js",
   "description": "Mdns graphic viewer",
+  "main": "lib/app.js",
   "license": "MIT",
-  "repository": "",
   "author": {
     "name": "b.harmel@gmail.com",
     "email": "onbings@onbings.com",
     "url": "http://onbings.dscloud.me"
   },
+  "repository": "https://github.com/onbings/mdns",
   "keywords": [
-    ""
+    "Electron",
+    "cytoscape",
+    "mdns",
+    "tutorial",
+    "demo"
   ],
   "files": [
     "lib"
   ],
   "typings": "lib/index.d.ts",
   "scripts": {
+    "start": "electron .",
     "clean": "rimraf lib && rimraf coverage",
     "format": "prettier --write \"{src,__tests__}/**/*.ts\" --single-quote --trailing-comma es5",
     "lint": "tslint --force --format verbose \"src/**/*.ts\"",
     "prepare": "npm run build",
     "prebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
     "build": "tsc --pretty",
-    "dev": "npm run build && http-server dist -o",
+    "devhttp": "npm run build && http-server dist -o",
+    "bldelectron": "tsc --pretty",
     "test": "jest",
     "coverage": "jest --coverage",
     "watch": "npm run build -- --watch",
     "watch:test": "jest --watch",
     "postbuild": "",
-    "updatedist": "copyfiles -u 1 -V \"./html/*\" ./dist/ && copyfiles -u 2 -V \"./html/asset/*\" ./dist/ && copyfiles -u 1 -V \"./lib/*\" ./dist/",
-    "start": "electron .",
+    "updatedistandlib": "copyfiles -u 1 -V \"./html/*\" \"./lib/*.js\" ./dist/ && copyfiles -u 2 -V \"./html/asset/*\" ./dist/ && copyfiles -u 1 -V \"./html/*\" ./lib/ && copyfiles -u 2 -V \"./html/asset/*\" ./lib/",
     "build-jsdocs": "jsdoc src -r -c jsdocconfig.json -d docs",
     "build-docs": "typedoc --options tsdocconfig.json --out docs src"
   },
