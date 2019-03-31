@@ -13,7 +13,7 @@ const ModCytoscape = require('cytoscape');
 const ModD3 = require('d3');
 const ModElectron = require('electron');
 const ModYargs = require('yargs');
-/*
+
 import { app } from 'electron';
 import ElectronMain from './main';
 ElectronMain.S_Instance().Initialize(app, {
@@ -22,8 +22,8 @@ ElectronMain.S_Instance().Initialize(app, {
 	icon: './asset/icon-mdns.png',
 	width: 800
 });
-*/
 
+/*******
 const electron = require('electron');
 // Module to control application life.
 const app = electron.app;
@@ -334,6 +334,8 @@ function dragended(d: any) {
 }
 
 run(graph);
+*******/
+
 
 /*
 
