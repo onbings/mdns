@@ -4,12 +4,33 @@
     <meta content='width=device-width, initial-scale=1, minimum-scale=1.0, maximum-scale=1.0' name='viewport' />
     <script src="index.js"></script>
   </head>
+  <style>
+    #cy {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+  </style>  
    <body>
     <h1> open dev tool and console logs</h1>
     <div id="app"></div>
-    <script src = "app.js"></script>
     We are using node <script>document.write(process.versions.node)</script>,
     Chrome <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>.    
+    <!-- All of the Node.js APIs are available in this renderer process. -->
+    <div id='cy'>
+    </div>    
   </body>
+
+
+  <script>
+    // You can also require other files to run in this process
+    require('./renderer.js');
+    var test_graph = require('./cy_graph.js');
+    var cy = test_graph.createGraph();
+  </script> 
+
+
 </html>

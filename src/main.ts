@@ -1,11 +1,15 @@
 // https://typedoc.org/guides/doccomments/
 // https://medium.com/@davembush/typescript-and-electron-the-right-way-141c2e15e4e1
-// https://github.com/Microsoft/vscode-recipes/tree/master/Electron
+// DEBUG: https://github.com/Microsoft/vscode-recipes/tree/master/Electron Press greentriangle (play) to connect on the renderer after F5 on main
+// https://github.com/cytoscape/cytoscape.js-tutorials/tree/master/learning-electron
+// http://blog.js.cytoscape.org/2016/05/24/getting-started/
+// https://www.christianengvall.se/electron-windows-installer/
 import { app, BrowserWindow } from 'electron';
 // const ModElectron = require('electron');
 // const { app, BrowserWindow } = require('electron');
 const ModPath = require('path');
-
+const ModCytoscape = require('cytoscape');
+const ipc = require('electron').ipcMain
 /**
  *  Implements the singleton class ElectronMain which is used to keep a static reference to the main window object
  */
@@ -19,6 +23,7 @@ export default class ElectronMain {
 	}
 	/** The singleton instance */
 	private static mInstance: ElectronMain = null;
+	
 	/** The singleton initialized state */
 	private mIsInitialized_B: boolean = false;
 
@@ -60,8 +65,60 @@ export default class ElectronMain {
 			this.mApplication.on('ready', () => {
 				this.mIsInitialized_B = true;
 				this.CreateMainWindow();
+				console.log("html=%s\n",'file://' + __dirname + '/index.html');
 				this.mMainWindow.loadURL('file://' + __dirname + '/index.html');
-				this.mMainWindow.webContents.openDevTools();
+				if (process.env.NODE_ENV === 'development') {
+					this.mMainWindow.webContents.openDevTools();
+				}
+				ipc.on('update-notify-value', (event: any, arg: any) => {
+					this.mMainWindow.webContents.send('targetPriceVal', arg)
+				  })
+				// this.mMainWindow.webContents.send('asynchronous-message', {'SAVED': 'File Saved'});
+/*
+				let cy:any = cytoscape({
+					container: this.el.nativeElement,
+					layout: this.layout,
+					minZoom: this.zoom.min,
+					maxZoom: this.zoom.max,
+					style: this.style,
+					elements: this.elements,
+			});
+			
+			this.mMainWindow.on('show', () => {
+				console.log("ready show\n");
+				var r:any=document.getElementById('cy');
+					var cy:any = ModCytoscape({
+						container: document.getElementById('cy'),
+						elements: [
+							{ data: { id: 'a' } },
+							{ data: { id: 'b' } },
+							{
+								data: {
+									id: 'ab',
+									source: 'a',
+									target: 'b'
+								}
+							}]
+					});
+				});
+				*/
+				/*
+				this.mMainWindow.on('browser-window-focus', () => {
+					var cy = ModCytoscape({
+						container: document.getElementById('cy'),
+						elements: [
+							{ data: { id: 'a' } },
+							{ data: { id: 'b' } },
+							{
+								data: {
+									id: 'ab',
+									source: 'a',
+									target: 'b'
+								}
+							}]
+					});
+				});
+				*/
 			});
 
 			// On macOS it's common to re-create a window in the app when the dock icon is clicked and there are no other windows open.
