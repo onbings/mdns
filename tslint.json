@@ -4,6 +4,7 @@
     "tslint-config-prettier"
   ],
   "rules": {
-    "no-var-requires": false
+    "no-var-requires": false,
+    "variable-name": false
   }  
 }

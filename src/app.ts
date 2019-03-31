@@ -5,89 +5,81 @@
 // https://github.com/mafintosh/multicast-dns#mdns--multicastdnsoptions
 // https://www.tutorialsteacher.com/D3js
 
-const ModBonjour = require('bonjour');
-const ModClear = require('clear');
-const ModCliTable = require('cli-table3');
-const ModColors = require('colors');
-const ModCytoscape = require('cytoscape');
-const ModD3 = require('d3');
-const ModElectron = require('electron');
-const ModYargs = require('yargs');
+const ModBonjour = require("bonjour");
+const ModClear = require("clear");
+const ModCliTable = require("cli-table3");
+const ModColors = require("colors");
+const ModCytoscape = require("cytoscape");
+const ModD3 = require("d3");
+const ModElectron = require("electron");
+const ModYargs = require("yargs");
 
-import { app } from 'electron';
-import ElectronMain from './main';
+import { app } from "electron";
+import ElectronMain from "./main";
 ElectronMain.Instance().Initialize(app, {
 	center: true,
 	height: 600,
-	icon: './asset/icon-mdns.png',
-	width: 800,
+	icon: "./asset/icon-mdns.png",
+	width: 800
 });
 
 const multicastdnsOption = {
-	interface: '',
-	ip: '224.0.0.251', // set the udp ip
+	interface: "",
+	ip: "224.0.0.251", // set the udp ip
 	loopback: true, // receive your own packets
 	multicast: true, // use udp multicasting
 	// interface: '192.168.0.2', // explicitly specify a network interface. defaults to all    port: 5353, // set the udp port
 	reuseAddr: true, // set the reuseAddr option when creating the socket (requires node >=0.11.13)
-	ttl: 255, // set the multicast ttl
+	ttl: 255 // set the multicast ttl
 };
 ModBonjour(multicastdnsOption);
 
 function someFunction() {
 	// console.log('hello qqqqqbha');
-	ModD3.select('#p2').style('color', 'red');
+	ModD3.select("#p2").style("color", "red");
 }
 
-const appDiv = ModD3.select('#app');
+const appDiv = ModD3.select("#app");
 appDiv.innerHTML = `<h1>TypeScript bhq Starter</h1>`;
 
 // advertise an HTTP server on port 3000
 ModBonjour.publish({
-	host: 'localhost',
-	name: 'My Web Server',
+	host: "localhost",
+	name: "My Web Server",
 	port: 3000,
-	protocol: 'tcp',
-	subtype: ['bha', '1', '2'],
-	txt: { chunky: true, name: 'bacon', strips: 5 },
-	type: 'http',
+	protocol: "tcp",
+	subtype: ["bha", "1", "2"],
+	txt: { chunky: true, name: "bacon", strips: 5 },
+	type: "http"
 });
 // browse for all http services
 // Bonjour.find({ type: 'http' }, function (service: any) {
 // console.log('Found an HTTP server:', service)
 // });
 
-const typeToFind = ModYargs.usage('$0 <cmd> [args]')
-	.option('type', {
-		alias: 't',
-		describe: 'service type, e.g. ipp, http, ssh — defaults to everything',
+const typeToFind = ModYargs.usage("$0 <cmd> [args]")
+	.option("type", {
+		alias: "t",
+		describe: "service type, e.g. ipp, http, ssh — defaults to everything"
 	})
 	.help().argv;
 
 // const typeToFind = '';
-const FIELDS = [
-	'host',
-	'addresses',
-	'type',
-	'port',
-	'protocol',
-	'txt',
-	'referer',
-];
+const FIELDS = ["host", "addresses", "type", "port", "protocol", "txt", "referer"];
 // https://stackoverflow.com/questions/5612787/converting-an-object-to-a-string
 
 function objToString(obj: any) {
-	let str = '';
+	let str = "";
 	if (Array.isArray(obj)) {
 		for (const p in obj) {
 			if (obj.hasOwnProperty(p)) {
-				str += ModColors.green(obj[p]) + '\n';
+				str += ModColors.green(obj[p]) + "\n";
 			}
 		}
-	} else if (typeof obj === 'object' && obj !== null) {
+	} else if (typeof obj === "object" && obj !== null) {
 		for (const p in obj) {
 			if (obj.hasOwnProperty(p)) {
-				str += p + '::' + ModColors.blue(obj[p]) + '\n';
+				str += p + "::" + ModColors.blue(obj[p]) + "\n";
 			}
 		}
 	} else {
@@ -101,7 +93,7 @@ const detectedDevice: any = {};
 function updateTable() {
 	ModClear();
 	const table = new ModCliTable({
-		head: FIELDS,
+		head: FIELDS
 	});
 	Object.keys(detectedDevice).forEach(key => {
 		table.push(detectedDevice[key]);
@@ -110,35 +102,33 @@ function updateTable() {
 }
 
 const browser = ModBonjour.find(typeToFind);
-browser.on('up', (service: any) => {
+browser.on("up", (service: any) => {
 	// console.log('%s %s %s', field, typeof field, service[field].toString());
 
-	detectedDevice[service.fqdn] = FIELDS.map(field =>
-		objToString(service[field])
-	);
+	detectedDevice[service.fqdn] = FIELDS.map(field => objToString(service[field]));
 	updateTable();
 });
-browser.on('down', (service: any) => {
+browser.on("down", (service: any) => {
 	delete detectedDevice[service.fqdn];
 	updateTable();
 });
 
 // https://bl.ocks.org/Restuta/e4533c4e8c8bbb43fa361a1e1525a3c2
 
-const svg = ModD3.select('svg');
-const width = +svg.attr('width');
-const height = +svg.attr('height');
+const svg = ModD3.select("svg");
+const width = +svg.attr("width");
+const height = +svg.attr("height");
 
 const simulation = ModD3.forceSimulation()
 	.force(
-		'link',
+		"link",
 		ModD3.forceLink().id((d: any) => {
 			return d.id;
 		})
 	)
 	// .force("charge", D3.forceManyBody().strength(-200))
 	.force(
-		'charge',
+		"charge",
 		ModD3.forceManyBody()
 			.strength(-200)
 			.theta(0.8)
@@ -148,29 +138,18 @@ const simulation = ModD3.forceSimulation()
 	//       .radius(d => 40)
 	//       .iterations(2)
 	//     )
-	.force('center', ModD3.forceCenter(width / 2, height / 2));
+	.force("center", ModD3.forceCenter(width / 2, height / 2));
 
 const graph = {
 	links: [
-		{ source: '1', target: '2', value: 1 },
-		{ source: '2', target: '4', value: 1 },
-		{ source: '4', target: '8', value: 1 },
-		{ source: '4', target: '8', value: 1 },
-		{ source: '8', target: '16', value: 1 },
-		{ source: '16', target: '1', value: 1 },
+		{ source: "1", target: "2", value: 1 },
+		{ source: "2", target: "4", value: 1 },
+		{ source: "4", target: "8", value: 1 },
+		{ source: "4", target: "8", value: 1 },
+		{ source: "8", target: "16", value: 1 },
+		{ source: "16", target: "1", value: 1 }
 	],
-	nodes: [
-		{ id: '1', group: 1 },
-		{ id: '2', group: 2 },
-		{ id: '4', group: 3 },
-		{ id: '8', group: 4 },
-		{ id: '16', group: 5 },
-		{ id: '11', group: 1 },
-		{ id: '12', group: 2 },
-		{ id: '14', group: 3 },
-		{ id: '18', group: 4 },
-		{ id: '116', group: 5 },
-	],
+	nodes: [{ id: "1", group: 1 }, { id: "2", group: 2 }, { id: "4", group: 3 }, { id: "8", group: 4 }, { id: "16", group: 5 }, { id: "11", group: 1 }, { id: "12", group: 2 }, { id: "14", group: 3 }, { id: "18", group: 4 }, { id: "116", group: 5 }]
 };
 
 function run(grf: any) {
@@ -180,80 +159,80 @@ function run(grf: any) {
 	});
 
 	const link = svg
-		.append('g')
-		.style('stroke', '#aaa')
-		.selectAll('line')
+		.append("g")
+		.style("stroke", "#aaa")
+		.selectAll("line")
 		.data(graph.links)
 		.enter()
-		.append('line');
+		.append("line");
 
 	const node = svg
-		.append('g')
-		.attr('class', 'nodes')
-		.selectAll('circle')
+		.append("g")
+		.attr("class", "nodes")
+		.selectAll("circle")
 		.data(graph.nodes)
 		.enter()
-		.append('circle')
-		.attr('r', 2)
+		.append("circle")
+		.attr("r", 2)
 		.call(
 			ModD3.drag()
-				.on('start', dragstarted)
-				.on('drag', dragged)
-				.on('end', dragended)
+				.on("start", dragstarted)
+				.on("drag", dragged)
+				.on("end", dragended)
 		);
 
 	const label = svg
-		.append('g')
-		.attr('class', 'labels')
-		.selectAll('text')
+		.append("g")
+		.attr("class", "labels")
+		.selectAll("text")
 		.data(graph.nodes)
 		.enter()
-		.append('text')
-		.attr('class', 'label')
+		.append("text")
+		.attr("class", "label")
 		.text((d: any) => {
 			return d.id;
 		});
 
-	simulation.nodes(graph.nodes).on('tick', ticked);
+	simulation.nodes(graph.nodes).on("tick", ticked);
 
-	simulation.force('link').links(graph.links);
+	simulation.force("link").links(graph.links);
 
 	function ticked() {
 		link
-			.attr('x1', (d: any) => {
+			.attr("x1", (d: any) => {
 				return d.source.x;
 			})
-			.attr('y1', (d: any) => {
+			.attr("y1", (d: any) => {
 				return d.source.y;
 			})
-			.attr('x2', (d: any) => {
+			.attr("x2", (d: any) => {
 				return d.target.x;
 			})
-			.attr('y2', (d: any) => {
+			.attr("y2", (d: any) => {
 				return d.target.y;
 			});
 
 		node
-			.attr('r', 16)
-			.style('fill', '#efefef')
-			.style('stroke', '#424242')
-			.style('stroke-width', '1px')
-			.attr('cx', (d: any) => {
+			.attr("r", 16)
+			.style("fill", "#efefef")
+			.style("stroke", "#424242")
+			.style("stroke-width", "1px")
+			.attr("cx", (d: any) => {
 				return d.x + 5;
 			})
-			.attr('cy', (d: any) => {
+			.attr("cy", (d: any) => {
 				return d.y - 3;
 			});
 
 		label
-			.attr('x', (d: any) => {
+			.attr("x", (d: any) => {
 				return d.x;
 			})
-			.attr('y', (d: any) => {
+			.attr("y", (d: any) => {
 				return d.y;
 			})
-			.style('font-size', '10px')
-			.style('fill', '#333');
+			.style("font-size", "10px")
+			.style("fill", "#333");
 	}
 }
 
