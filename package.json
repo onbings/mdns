@@ -1,0 +1,82 @@
+{
+  "name": "mdns",
+  "version": "1.2.3",
+  "main": "lib/index.js",
+  "description": "Mdns graphic viewer",
+  "license": "MIT",
+  "repository": "",
+  "author": {
+    "name": "b.harmel@gmail.com",
+    "email": "onbings@onbings.com",
+    "url": "http://onbings.dscloud.me"
+  },
+  "keywords": [
+    ""
+  ],
+  "files": [
+    "lib"
+  ],
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "clean": "rimraf lib && rimraf coverage",
+    "format": "prettier --write \"{src,__tests__}/**/*.ts\" --single-quote --trailing-comma es5",
+    "lint": "tslint --force --format verbose \"src/**/*.ts\"",
+    "prepare": "npm run build",
+    "prebuild": "npm run clean && npm run format && npm run lint && echo Using TypeScript && tsc --version",
+    "build": "tsc --pretty",
+    "dev": "npm run build && http-server dist -o",
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "watch": "npm run build -- --watch",
+    "watch:test": "jest --watch",
+    "postbuild": "",
+    "updatedist": "copyfiles -u 1 -V \"./html/*\" ./dist/ && copyfiles -u 2 -V \"./html/asset/*\" ./dist/ && copyfiles -u 1 -V \"./lib/*\" ./dist/",
+    "start": "electron .",
+    "build-jsdocs": "jsdoc src -r -c jsdocconfig.json -d docs",
+    "build-docs": "typedoc --options tsdocconfig.json --out docs src"
+  },
+  "dependencies": {
+    "bonjour": "^3.5.0",
+    "clear": "^0.1.0",
+    "cli-table3": "^0.5.1",
+    "colors": "^1.3.3",
+    "cytoscape": "^3.5.1",
+    "d3": "^5.9.2",
+    "dgram": "^1.0.1",
+    "yargs": "^13.2.2",
+    "electron": "^4.1.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.0.1",
+    "@types/node": "^8.0.0",
+    "coveralls": "^2.0.0",
+    "http-server": "^0.11.1",
+    "jest": "^22.0.4",
+    "jest-environment-node-debug": "^2.0.0",
+    "jsdoc-plugin-typescript": "^1.0.7",
+    "prettier": "^1.5.2",
+    "rimraf": "^2.0.0",
+    "ts-jest": "^22.0.1",
+    "ts-loader": "^3.4.0",
+    "ts-node": "^3.2.0",
+    "tslint": "^5.0.0",
+    "tslint-config-prettier": "^1.1.0",
+    "typescript": "^2.3.0"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "jest": {
+    "transform": {
+      ".(ts)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "testEnvironment": "node",
+    "name": "mdns-test",
+    "verbose": true
+  }
+}
