@@ -4,6 +4,7 @@
 // https://github.com/cytoscape/cytoscape.js-tutorials/tree/master/learning-electron
 // http://blog.js.cytoscape.org/2016/05/24/getting-started/
 // https://www.christianengvall.se/electron-windows-installer/
+// https://blog.avocode.com/get-that-damn-windows-auto-update-working-on-electron-b60945a6cfdf
 import { app, BrowserWindow } from 'electron';
 // const ModElectron = require('electron');
 // const { app, BrowserWindow } = require('electron');
